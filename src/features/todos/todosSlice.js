@@ -1,15 +1,24 @@
 import { createSlice } from "@reduxjs/toolkit";
+let nextTodoId = 0;
 let todosSlice = createSlice({
 	name: "todos",
 	initialState: [],
 	reducers: {
-		addTodo: (state, action) => {
-			const { id, text } = action.payload;
-			state.push({
-				id,
-				text,
-				completed: false
-			});
+		addTodo: {
+			reduce(state, action) {
+				const { id, text } = action.payload;
+				state.push({
+					id,
+					text,
+					completed: false
+				});
+			},
+			prepare(text) {
+				return {
+					payload: text,
+					id: nextTodoId++
+				}
+			}
 		},
 		toggleTodo: (state, action) => {
 			const todo = state.find((todo) => todo.id === action.payload);
